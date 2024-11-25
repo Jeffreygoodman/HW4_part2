@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Table</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="multiplication_table.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous">
+    </script> <!-- Link to jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script> <!-- Link to jQuery Validation Plugin -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+</head>
+<body>
+    <h1>Multiplication Table</h1>
+    <div id="error-message" class="error-message"></div> <!-- Placeholder for error messages -->
+    <div id="dynamic-table-container"></div> <!-- Placeholder for dynamic tables -->
+    <div class="container">
+        <div class="forms">
+            <form id="tableForm">
+                <h3>Table Inputs</h3>
+                <label for="minRow">Minimum Row:</label>
+                <input type="number" id="minRow" name="minRow">
+                <div id="slider-minRow"></div>
+                <br>
+                <label for="maxRow">Maximum Row:</label>
+                <input type="number" id="maxRow" name="maxRow">
+                <div id="slider-maxRow"></div>
+                <br>
+                <label for="minCol">Minimum Column:</label>
+                <input type="number" id="minCol" name="minCol">
+                <div id="slider-minCol"></div>
+                <br>
+                <label for="maxCol">Maximum Column:</label>
+                <input type="number" id="maxCol" name="maxCol">
+                <div id="slider-maxCol"></div>
+                <br><br>
+                <button type="submit" id="submitButton">Generate Table</button>
+            </form>
+        </div>
+        <!-- Tabs container -->
+        <div id="tabs">
+            <ul id="tabs-list"></ul> <!-- Tab headers -->
+        </div>
+        <div id="delete-controls">
+            <button type="button" id="deleteSelectedTabs">Delete Selected Tabs</button>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#tabs").tabs(); //Initialize tabs
+
+            //Initialize sliders
+            $("#slider-minRow").slider({
+                min: -50,
+                max: 50,
+                slide: function (event, ui) {
+                    $("#minRow").val(ui.value);
+                    validateAndUpdateTable();
+                }
+            });
+            $("#slider-maxRow").slider({
+                min: -50,
+                max: 50,
+                slide: function (event, ui) {
+                    $("#maxRow").val(ui.value);
+                    validateAndUpdateTable();
+                }
+            });
+            $("#slider-minCol").slider({
+                min: -50,
+                max: 50,
+                slide: function (event, ui) {
+                    $("#minCol").val(ui.value);
+                    validateAndUpdateTable();
+                }
+            });
+            $("#slider-maxCol").slider({
+                min: -50,
+                max: 50,
+                slide: function (event, ui) {
+                    $("#maxCol").val(ui.value);
+                    validateAndUpdateTable();
+                }
+            });
+
+            //sync sliders with input fields
+            $("#minRow, #maxRow, #minCol, #maxCol").on("input", validateAndUpdateTable);
+
+            // Form validation and new tab creation
+            $("#tableForm").validate({
+                rules: {
+                    minRow: { required: true, min: -50, max: 50, number: true},
+                    maxRow: { required: true, min: -50, max: 50, number: true, greaterThan: "#minRow" },
+                    minCol: { required: true, min: -50, max: 50, number: true},
+                    maxCol: { required: true, min: -50, max: 50, number: true, greaterThan: "#minCol" }
+                },
+                submitHandler: function () {
+                    createNewTab();
+                }
+            });
+        });
+
+        // attach the delete button logic
+        document.getElementById('deleteSelectedTabs').addEventListener('click', deleteSelectedTabs);
+
+        // custom validation method for greaterThan rule
+        $.validator.addMethod("greaterThan", function(value, element, param) {
+            let minValue = $(param).val();
+            return parseInt(value) > parseInt(minValue);
+        }, "Maximum value must be greater than the minimum value");
+    </script>
+</body>
+</html>

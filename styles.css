@@ -1,0 +1,152 @@
+/*Jeffrey Goodman*/
+/* background image for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-image: url('vector.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+/* Styling for the error message */
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 3px lightcoral;
+    border-radius: 5px;
+    background-color: #ffe6e6;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-grow: 1;
+}
+
+/* scrollable table container with fixed dimensions */
+.table-container {
+    display: block;                 /* allow for sticky positioning */
+    padding: 10px;
+    width: 85vw;                    /* set the container width to 85% of the viewport */
+    max-height: 65vh;               /* limit the container height to 65% of the viewport height */
+    overflow-x: auto;               /* enable horizontal scrolling */
+    overflow-y: auto;               /* enable vertical scrolling */
+    border: 1px solid #ccc;
+    background-color: white;
+}
+
+/* table styling */
+table {
+    min-width: 100%;                /* ensures the table stretches to fill container width */
+    font-size: 16px;                /* slightly smaller font size for readability */
+    border-collapse: collapse;
+    border: 2px solid black;        /* add a thicker border around the table for visibility */
+}
+
+/* header and cell styling */
+th, td {
+    padding: 10px;                  /* add padding to make the cells larger */
+    width: 120px;                   /* fixed cell width to stop shrinking */
+    text-align: center;
+    border: 1px solid black;        /* make sure each cell has a border */
+    box-sizing: border-box;         /* include padding and border in the element's total width and height */
+    overflow-wrap: break-word;      /* allow wrapping for very large numbers */
+    white-space: nowrap;            /* prevent text from wrapping inside cells */
+}
+
+/* fixed header styling */
+thead th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    position: sticky;
+    top: 0;                         /* stick the top row at the top */
+    z-index: 2;                     /* keep top row above other cells */
+}
+
+tbody th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    position: sticky;
+    left: 0;                        /* stick the first column to the left */
+    z-index: 1;                     /* keep row headers below the top row headers */
+}
+
+/* alternating row colors for readability */
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:nth-child(odd) {
+    background-color: #e0e0e0;
+}
+
+/* forms styling */
+.forms {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.9); 
+    padding: 10px;
+    border-radius: 8px;
+}
+
+form {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .forms {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .forms {
+        width: 100%;
+    }
+    button {
+        width: 100%;
+    }
+}
