@@ -53,7 +53,7 @@ function updateDynamicTable() {
 // Function to create a new tab with the current dynamic table
 function createNewTab() {
     const dynamicTable = document.querySelector('#dynamic-table-container table');
-    if (!dynamicTable){
+    if (!dynamicTable) {
         alert('No table to add!');
         return;
     }
@@ -76,9 +76,14 @@ function createNewTab() {
     const newTabContent = document.createElement('div');
     newTabContent.id = tabId;
 
+    // Wrap the table in a .table-container div
+    const tableContainer = document.createElement('div');
+    tableContainer.classList.add('table-container');
+
     // Clone the current table into the new tab
     const tableClone = dynamicTable.cloneNode(true);
-    newTabContent.appendChild(tableClone);
+    tableContainer.appendChild(tableClone);
+    newTabContent.appendChild(tableContainer);
 
     // Add the tab content to the tabs container
     document.getElementById('tabs').appendChild(newTabContent);

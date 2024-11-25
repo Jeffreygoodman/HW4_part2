@@ -1,3 +1,4 @@
+<!-- Jeffrey Goodman-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +19,7 @@
 <body>
     <h1>Multiplication Table</h1>
     <div id="error-message" class="error-message"></div> <!-- Placeholder for error messages -->
-    <div id="dynamic-table-container"></div> <!-- Placeholder for dynamic tables -->
+    <div id="dynamic-table-container" class="table-container"></div> <!-- Placeholder for dynamic tables -->
     <div class="container">
         <div class="forms">
             <form id="tableForm">
@@ -52,51 +53,20 @@
     </div>
     <script>
         $(function () {
-            $("#tabs").tabs(); //Initialize tabs
+            $("#tabs").tabs(); // Initialize tabs
 
-            //Initialize sliders
-            $("#slider-minRow").slider({
-                min: -50,
-                max: 50,
-                slide: function (event, ui) {
-                    $("#minRow").val(ui.value);
-                    validateAndUpdateTable();
-                }
-            });
-            $("#slider-maxRow").slider({
-                min: -50,
-                max: 50,
-                slide: function (event, ui) {
-                    $("#maxRow").val(ui.value);
-                    validateAndUpdateTable();
-                }
-            });
-            $("#slider-minCol").slider({
-                min: -50,
-                max: 50,
-                slide: function (event, ui) {
-                    $("#minCol").val(ui.value);
-                    validateAndUpdateTable();
-                }
-            });
-            $("#slider-maxCol").slider({
-                min: -50,
-                max: 50,
-                slide: function (event, ui) {
-                    $("#maxCol").val(ui.value);
-                    validateAndUpdateTable();
-                }
-            });
-
-            //sync sliders with input fields
-            $("#minRow, #maxRow, #minCol, #maxCol").on("input", validateAndUpdateTable);
+            // Initialize sliders with two-way binding
+            initializeSliderWithBinding("#slider-minRow", "#minRow", -50, 50);
+            initializeSliderWithBinding("#slider-maxRow", "#maxRow", -50, 50);
+            initializeSliderWithBinding("#slider-minCol", "#minCol", -50, 50);
+            initializeSliderWithBinding("#slider-maxCol", "#maxCol", -50, 50);
 
             // Form validation and new tab creation
             $("#tableForm").validate({
                 rules: {
-                    minRow: { required: true, min: -50, max: 50, number: true},
+                    minRow: { required: true, min: -50, max: 50, number: true },
                     maxRow: { required: true, min: -50, max: 50, number: true, greaterThan: "#minRow" },
-                    minCol: { required: true, min: -50, max: 50, number: true},
+                    minCol: { required: true, min: -50, max: 50, number: true },
                     maxCol: { required: true, min: -50, max: 50, number: true, greaterThan: "#minCol" }
                 },
                 submitHandler: function () {
@@ -105,10 +75,35 @@
             });
         });
 
-        // attach the delete button logic
+        // Function to initialize a slider with two-way binding to a text box
+        function initializeSliderWithBinding(sliderId, inputId, minValue, maxValue) {
+            // Initialize the slider
+            $(sliderId).slider({
+                min: minValue,
+                max: maxValue,
+                slide: function (event, ui) {
+                    $(inputId).val(ui.value); // Update the text box when slider moves
+                    validateAndUpdateTable(); // Update the table dynamically
+                }
+            });
+
+            // Sync the text box with the slider
+            $(inputId).on("input", function () {
+                const value = parseInt($(this).val());
+                if (!isNaN(value) && value >= minValue && value <= maxValue) {
+                    $(sliderId).slider("value", value); // Update the slider when text box changes
+                    validateAndUpdateTable(); // Update the table dynamically
+                }
+            });
+
+            // Initialize the text box value to match the slider's default
+            $(inputId).val($(sliderId).slider("value"));
+        }
+
+        // Attach the delete button logic
         document.getElementById('deleteSelectedTabs').addEventListener('click', deleteSelectedTabs);
 
-        // custom validation method for greaterThan rule
+        // Custom validation method for greaterThan rule
         $.validator.addMethod("greaterThan", function(value, element, param) {
             let minValue = $(param).val();
             return parseInt(value) > parseInt(minValue);
